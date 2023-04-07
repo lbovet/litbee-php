@@ -1,0 +1,11 @@
+{
+    "name": "litbee/access",
+    "description": "Button and individual content access control",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Litbee\\Access\\": "src/"
+        }
+    },
+    "require": {}
+}
