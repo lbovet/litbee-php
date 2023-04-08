@@ -58,7 +58,15 @@ class Content
     public function accessGateUrl()
     {
         $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
-        return ACCESS_GATE_URL . "?" . REQUEST_PARAM_NAME . "=" . $param;
+        $gate = getenv("LITBEE_ACCESS_GATE");
+        if(!$gate) {
+            $gate = ACCESS_GATE_URL;
+            $env = getenv("LITBEE_ENV");
+            if($env) {
+                $gate = str_replace("://", "://" . $env . ".", $gate);
+            }
+        }
+        return $gate . "?" . REQUEST_PARAM_NAME . "=" . $param;
     }
 
     public function renderButton()
