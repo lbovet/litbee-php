@@ -2,19 +2,65 @@
 
 namespace Litbee\Access;
 
+const ACCESS_GATE_URL = "https://litbee.ch/access";
+const CONTENT_ID_KEY = "litbee.contentId";
+const NONCE_KEY = "litbee.nonce";
+const REQUEST_PARAM_NAME = "r";
+const TOKEN_PARAM_NAME = "litbee";
+
 class Button
 {
-    private bool $granted = false;
-    private int $nonce;
-    private string $contentId;
+    private Session $session;
+    private Protocol $protocol;
+    private Context $context;
 
-    public function __construct(string $contentId) {
-        $this->contentId = $contentId;
-        $this->nonce = rand();
-        $_SESSION["litbee.nonce"] = $this->nonce;
+    private string $contentId;
+    private int $priceInCents;
+
+    private int $nonce;
+    private bool $granted = false;
+
+    public function __construct(int $priceInCents = 0, Context $context = null, Session $session = null)
+    {
+        $this->priceInCents = $priceInCents;
+        $this->protocol = new Protocol();
+
+        if($context != null) {
+            $this->context = $context;
+        } else {
+            $context = new Context(TOKEN_PARAM_NAME);
+        }
+        $this->contentId = sha1($context->contentId());
+
+        // manage the nonce to restrict access only to the current user.
+        if($session != null) {
+            $this->session = $session;
+        } else {
+            $this->session = new Session();
+        }
+        if ( $this->session->has(CONTENT_ID_KEY) && $this->session->getItem(CONTENT_ID_KEY) == $this->contentId) {
+            $this->nonce = $this->session->getItem(NONCE_KEY);
+        } else {
+            // generate a new nonce if new or changed page
+            $this->nonce = $this->context->nonce();
+            $this->session->setItem(CONTENT_ID_KEY, $this->contentId);
+            $this->session->setItem(NONCE_KEY, $this->nonce);
+        }
+
+        // check the token if present and grant access if valid
+        $token = $context->token();
+        if($token != null) {
+            $this->granted = $this->protocol->checkToken($token, $this->contentId, $this->nonce);
+        }
     }
 
-    public function isGranted() : bool
+    public function accessUrl()
+    {
+        $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
+        return ACCESS_GATE_URL . "?" . REQUEST_PARAM_NAME . "=" . $param;
+    }
+
+    public function accessGranted() : bool
     {
         return $this->granted;
     }

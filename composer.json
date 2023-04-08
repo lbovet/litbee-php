@@ -4,8 +4,10 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Litbee\\Access\\": "src/"
+            "Litbee\\Access\\": [ "src/", "src/impl" ]
         }
     },
-    "require": {}
+    "require-dev": {
+        "mockery/mockery": "^1.5"
+    }
 }
