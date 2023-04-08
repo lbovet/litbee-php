@@ -29,9 +29,9 @@ class Content
         if($context != null) {
             $this->context = $context;
         } else {
-            $context = new Context(TOKEN_PARAM_NAME);
+            $this->context = new Context(TOKEN_PARAM_NAME);
         }
-        $this->contentId = sha1($context->contentId());
+        $this->contentId = sha1($this->context->contentId());
 
         // manage the nonce to restrict access only to the current user.
         if($session != null) {
@@ -49,7 +49,7 @@ class Content
         }
 
         // check the token if present and grant access if valid
-        $token = $context->token();
+        $token = $this->context->token();
         if($token != null) {
             $this->granted = $this->protocol->checkToken($token, $this->contentId, $this->nonce);
         }
