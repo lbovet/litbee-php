@@ -32,7 +32,7 @@ class ButtonTest extends TestCase
 
         $protocol = new Protocol();
 
-        $protocol->decodeRequest(explode("=", $accessLink)[1], $contentId, $nonce, $priceInCents);
+        $protocol->decodeRequest(urldecode(explode("=", $accessLink)[1]), $contentId, $nonce, $priceInCents);
         $this->assertEquals(sha1("content1"), $contentId);
         $this->assertEquals(45, $nonce);
         $this->assertEquals(50, $priceInCents);

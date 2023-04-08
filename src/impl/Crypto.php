@@ -6,24 +6,24 @@ class Crypto {
 
     public function encryptRequest($request) {
         openssl_public_encrypt($request, $encrypted, $this->publicKey());
-        return urlencode(base64_encode($encrypted));
+        return base64_encode($encrypted);
     }
 
     public function decryptRequest($encryptedRequest)
     {
-        openssl_private_decrypt(base64_decode(urldecode($encryptedRequest)), $decrypted, $this->privateKey());
+        openssl_private_decrypt(base64_decode($encryptedRequest), $decrypted, $this->privateKey());
         return $decrypted;
     }
 
     public function encryptToken($token)
     {
         openssl_private_encrypt($token, $encrypted, $this->privateKey());
-        return urlencode(base64_encode($encrypted));
+        return base64_encode($encrypted);
     }
 
     public function decryptToken($encryptedToken)
     {
-        openssl_public_decrypt(base64_decode(urldecode($encryptedToken)), $decrypted, $this->publicKey());
+        openssl_public_decrypt(base64_decode($encryptedToken), $decrypted, $this->publicKey());
         return $decrypted;
     }
 

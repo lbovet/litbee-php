@@ -66,7 +66,7 @@ class Content
                 $gate = str_replace("://", "://" . $env . ".", $gate);
             }
         }
-        return $gate . "?" . REQUEST_PARAM_NAME . "=" . $param;
+        return $gate . "?" . REQUEST_PARAM_NAME . "=" . urlencode($param);
     }
 
     public function renderButton()
