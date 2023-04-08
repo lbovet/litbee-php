@@ -1,4 +1,4 @@
-<div class="litbee-button" onclick="window.location.replace('<?= $accessGateUrl ?>');">
+<div class="litbee-button" onclick="window.location='<?= $accessGateUrl ?>';">
     <div class="litbee-price">
         <?= $priceTag ?>
     </div>
