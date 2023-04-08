@@ -3,7 +3,6 @@
 namespace Litbee\Access;
 
 class Crypto {
-    private $pubKey;
 
     public function encryptRequest($request) {
         openssl_public_encrypt($request, $encrypted, $this->publicKey());
