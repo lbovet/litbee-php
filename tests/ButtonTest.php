@@ -51,5 +51,20 @@ class ButtonTest extends TestCase
 
         $this->assertTrue($content2->accessGranted());
     }
+
+    public function testRenderButton() {
+        $context = Mockery::mock(Context::class);
+        $context->shouldReceive('contentId')->andReturn("content1");
+        $context->shouldReceive('nonce')->andReturn(45);
+        $context->shouldReceive('token')->andReturn(null);
+
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive('has')->andReturn(false);
+        $session->shouldReceive('setItem');
+
+        $content = new Content(70, $context, $session);
+
+        $this->assertRegexp('/-.70/', $content->renderButton());
+    }
 }
 ?>

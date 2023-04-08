@@ -19,6 +19,7 @@ class Content
 
     private int $nonce;
     private bool $granted = false;
+    private bool $styleInserted = false;
 
     public function __construct(int $priceInCents = 0, Context $context = null, Session $session = null)
     {
@@ -58,6 +59,30 @@ class Content
     {
         $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
         return ACCESS_GATE_URL . "?" . REQUEST_PARAM_NAME . "=" . $param;
+    }
+
+    public function renderButton()
+    {
+        ob_start();
+        if(!$this->styleInserted) {
+            include "impl/style.php";
+            $this->styleInserted = true;
+        }
+        $priceTag = str_replace("0.", "-.", sprintf("%.2f", $this->priceInCents / 100.0));
+        $accessGateUrl = $this->accessGateUrl();
+        include "impl/button.php";
+        return ob_get_clean();
+    }
+
+    public function renderIcon()
+    {
+        ob_start();
+        if(!$this->styleInserted) {
+            include "impl/style.php";
+            $this->styleInserted = true;
+        }
+        include "impl/icon.php";
+        return ob_get_clean();
     }
 
     public function accessGranted() : bool
