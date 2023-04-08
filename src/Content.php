@@ -65,12 +65,12 @@ class Content
     {
         ob_start();
         if(!$this->styleInserted) {
-            include "impl/style.php";
+            include "impl/view/style.php";
             $this->styleInserted = true;
         }
         $priceTag = str_replace("0.", "-.", sprintf("%.2f", $this->priceInCents / 100.0));
         $accessGateUrl = $this->accessGateUrl();
-        include "impl/button.php";
+        include "impl/view/button.php";
         return ob_get_clean();
     }
 
@@ -78,10 +78,10 @@ class Content
     {
         ob_start();
         if(!$this->styleInserted) {
-            include "impl/style.php";
+            include "impl/view/style.php";
             $this->styleInserted = true;
         }
-        include "impl/icon.php";
+        include "impl/view/icon.php";
         return ob_get_clean();
     }
 
