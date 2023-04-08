@@ -8,7 +8,7 @@ const NONCE_KEY = "litbee.nonce";
 const REQUEST_PARAM_NAME = "r";
 const TOKEN_PARAM_NAME = "litbee";
 
-class Button
+class Content
 {
     private Session $session;
     private Protocol $protocol;
@@ -54,7 +54,7 @@ class Button
         }
     }
 
-    public function accessUrl()
+    public function accessGateUrl()
     {
         $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
         return ACCESS_GATE_URL . "?" . REQUEST_PARAM_NAME . "=" . $param;

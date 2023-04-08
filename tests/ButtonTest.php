@@ -22,13 +22,13 @@ class ButtonTest extends TestCase
         $session->shouldReceive('has')->andReturn(false);
         $session->shouldReceive('setItem');
 
-        $button = new Button(50, $context, $session);
+        $content = new Content(50, $context, $session);
 
-        $this->assertFalse($button->accessGranted());
+        $this->assertFalse($content->accessGranted());
 
         // Check access link
 
-        $accessLink = $button->accessUrl();
+        $accessLink = $content->accessGateUrl();
 
         $protocol = new Protocol();
 
@@ -47,9 +47,9 @@ class ButtonTest extends TestCase
         $session2->shouldReceive('has')->andReturn(true);
         $session2->shouldReceive('getItem')->andReturn(sha1("content1"), 45);
 
-        $button2 = new Button(50, $context2, $session2);
+        $content2 = new Content(50, $context2, $session2);
 
-        $this->assertTrue($button2->accessGranted());
+        $this->assertTrue($content2->accessGranted());
     }
 }
 ?>
