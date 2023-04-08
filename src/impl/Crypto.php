@@ -43,6 +43,11 @@ OQIDAQAB
 
     private function privateKey()
     {
-        return openssl_pkey_get_private(file_get_contents(__DIR__ . "/access.priv"), getenv("LITBEE_KEY_PWD"));
+        if(getenv("LITBEE_PRIVATE_KEY")) {
+            $file = getenv("LITBEE_PRIVATE_KEY");
+        } else {
+            $file = __DIR__ . "/access.priv";
+        }
+        return openssl_pkey_get_private(file_get_contents($file), getenv("LITBEE_KEY_PWD"));
     }
 }
