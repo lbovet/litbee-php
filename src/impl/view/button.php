@@ -1,8 +1,5 @@
-<div class="litbee-button" onclick="window.location='<?= $accessGateUrl ?>';">
-    <div class="litbee-price">
-        <?= $priceTag ?>
-    </div>
-    <div class="litbee-icon">
-        <?php include('icon.php') ?>
-    </div>
-</div>
+<img src='<?= $buttonImageUrl ?>'
+    class="litbee-button"
+    style="cursor: pointer"
+    onclick="window.location='<?= $accessGateUrl ?>';"
+    onerror="this.style.display='none'">

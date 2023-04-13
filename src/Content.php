@@ -55,9 +55,8 @@ class Content
         }
     }
 
-    public function accessGateUrl()
+    private function accessGateBaseUrl()
     {
-        $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
         $gate = getenv("LITBEE_ACCESS_GATE");
         if(!$gate) {
             $gate = ACCESS_GATE_URL;
@@ -66,30 +65,31 @@ class Content
                 $gate = str_replace("://", "://" . $env . ".", $gate);
             }
         }
-        return $gate . "?" . REQUEST_PARAM_NAME . "=" . urlencode($param);
+        return $gate;
+    }
+
+    public function accessGateUrl()
+    {
+        $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
+        return $this->accessGateBaseUrl() . "?" . REQUEST_PARAM_NAME . "=" . urlencode($param);
+    }
+
+    private function buttonImageUrl()
+    {
+        $granted=$this->accessGranted() ? 1 : 0;
+        return $this->accessGateBaseUrl() . "/button.php".
+            "?c=" . $this->contentId .
+            "&p=" . $this->priceInCents .
+            "&g=" . $granted;
     }
 
     public function renderButton()
     {
         ob_start();
-        if(!$this->styleInserted) {
-            include "impl/view/style.php";
-            $this->styleInserted = true;
-        }
         $priceTag = str_replace("0.", "-.", sprintf("%.2f", $this->priceInCents / 100.0));
         $accessGateUrl = $this->accessGateUrl();
+        $buttonImageUrl = $this->buttonImageUrl();
         include "impl/view/button.php";
-        return ob_get_clean();
-    }
-
-    public function renderIcon()
-    {
-        ob_start();
-        if(!$this->styleInserted) {
-            include "impl/view/style.php";
-            $this->styleInserted = true;
-        }
-        include "impl/view/icon.php";
         return ob_get_clean();
     }
 
