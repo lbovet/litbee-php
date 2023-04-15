@@ -2,7 +2,7 @@
 
 namespace Litbee\Access;
 
-const ACCESS_GATE_URL = "https://litbee.ch/access";
+const ACCESS_GATE_URL = "https://access.litbee.ch";
 const CONTENT_ID_KEY = "litbee.contentId";
 const NONCE_KEY = "litbee.nonce";
 const REQUEST_PARAM_NAME = "r";
