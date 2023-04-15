@@ -3,7 +3,7 @@
 namespace Litbee\Access;
 
 const ACCESS_GATE_URL = "https://access.litbee.ch";
-const CONTENT_ID_KEY = "litbee.contentId";
+const CONTENT_ID_KEY = "litbee.contentUrl";
 const NONCE_KEY = "litbee.nonce";
 const REQUEST_PARAM_NAME = "r";
 const TOKEN_PARAM_NAME = "litbee";
@@ -14,12 +14,11 @@ class Content
     private $protocol;
     private $context;
 
-    private $contentId;
+    private $contentUrl;
     private $priceInCents;
 
     private $nonce;
     private $granted = false;
-    private $styleInserted = false;
 
     public function __construct($priceInCents = 0, $context = null, $session = null)
     {
@@ -31,7 +30,7 @@ class Content
         } else {
             $this->context = new Context(TOKEN_PARAM_NAME);
         }
-        $this->contentId = sha1($this->context->contentId());
+        $this->contentUrl = $this->context->contentUrl();
 
         // manage the nonce to restrict access only to the current user.
         if($session != null) {
@@ -39,19 +38,19 @@ class Content
         } else {
             $this->session = new Session();
         }
-        if ( $this->session->has(CONTENT_ID_KEY) && $this->session->getItem(CONTENT_ID_KEY) == $this->contentId) {
+        if ( $this->session->has(CONTENT_ID_KEY) && $this->session->getItem(CONTENT_ID_KEY) == $this->contentUrl) {
             $this->nonce = $this->session->getItem(NONCE_KEY);
         } else {
             // generate a new nonce if new or changed page
             $this->nonce = $this->context->nonce();
-            $this->session->setItem(CONTENT_ID_KEY, $this->contentId);
+            $this->session->setItem(CONTENT_ID_KEY, $this->contentUrl);
             $this->session->setItem(NONCE_KEY, $this->nonce);
         }
 
         // check the token if present and grant access if valid
         $token = $this->context->token();
         if($token != null) {
-            $this->granted = $this->protocol->checkToken($token, $this->contentId, $this->nonce);
+            $this->granted = $this->protocol->checkToken($token, $this->contentUrl, $this->nonce);
         }
     }
 
@@ -70,7 +69,7 @@ class Content
 
     public function accessGateUrl()
     {
-        $param = $this->protocol->createRequest($this->contentId, $this->nonce, $this->priceInCents);
+        $param = $this->protocol->createRequest($this->contentUrl, $this->nonce, $this->priceInCents);
         return $this->accessGateBaseUrl() . "?" . REQUEST_PARAM_NAME . "=" . urlencode($param);
     }
 
@@ -78,7 +77,7 @@ class Content
     {
         $granted=$this->accessGranted() ? 1 : 0;
         return $this->accessGateBaseUrl() . "/button.php".
-            "?c=" . $this->contentId .
+            "?c=" . $this->contentUrl .
             "&p=" . $this->priceInCents .
             "&g=" . $granted;
     }

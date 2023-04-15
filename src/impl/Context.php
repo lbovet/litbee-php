@@ -10,8 +10,11 @@ class Context
         $this->paramName = $paramName;
     }
 
-    public function contentId() {
-        return strtok($_SERVER["REQUEST_URI"], "?");
+    public function contentUrl() {
+        $protocol = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $domain =  $_SERVER['HTTP_HOST'];
+        $resource = strtok($_SERVER["REQUEST_URI"], "?");
+        return $protocol . $domain . $resource;
     }
 
     public function token() {
