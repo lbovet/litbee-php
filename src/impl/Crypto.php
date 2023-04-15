@@ -4,24 +4,24 @@ namespace Litbee\Access;
 
 class Crypto {
 
-    public function encryptRequest($request) {
+    public function publicEncrypt($request) {
         openssl_public_encrypt($request, $encrypted, $this->publicKey());
         return base64_encode($encrypted);
     }
 
-    public function decryptRequest($encryptedRequest)
+    public function privateDecrypt($encryptedRequest)
     {
         openssl_private_decrypt(base64_decode($encryptedRequest), $decrypted, $this->privateKey());
         return $decrypted;
     }
 
-    public function encryptToken($token)
+    public function privateEncrypt($token)
     {
         openssl_private_encrypt($token, $encrypted, $this->privateKey());
         return base64_encode($encrypted);
     }
 
-    public function decryptToken($encryptedToken)
+    public function publicDecrypt($encryptedToken)
     {
         openssl_public_decrypt(base64_decode($encryptedToken), $decrypted, $this->publicKey());
         return $decrypted;
