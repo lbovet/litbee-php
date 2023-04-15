@@ -77,7 +77,7 @@ class Content
     {
         $granted=$this->accessGranted() ? 1 : 0;
         return $this->accessGateBaseUrl() . "/button.php".
-            "?c=" . $this->contentUrl .
+            "?c=" . sha1($this->contentUrl) .
             "&p=" . $this->priceInCents .
             "&g=" . $granted;
     }
