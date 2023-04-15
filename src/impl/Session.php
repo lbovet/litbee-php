@@ -5,7 +5,7 @@ namespace Litbee\Access;
 class Session
 {
 
-    private $started=false;
+    private $started = false;
 
     public function start()
     {

@@ -4,9 +4,9 @@ namespace Litbee\Access;
 
 class Context
 {
-    private string $paramName;
+    private $paramName;
 
-    public function __construct(string $paramName) {
+    public function __construct($paramName) {
         $this->paramName = $paramName;
     }
 

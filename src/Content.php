@@ -10,18 +10,18 @@ const TOKEN_PARAM_NAME = "litbee";
 
 class Content
 {
-    private Session $session;
-    private Protocol $protocol;
-    private Context $context;
+    private $session;
+    private $protocol;
+    private $context;
 
-    private string $contentId;
-    private int $priceInCents;
+    private $contentId;
+    private $priceInCents;
 
-    private int $nonce;
-    private bool $granted = false;
-    private bool $styleInserted = false;
+    private $nonce;
+    private $granted = false;
+    private $styleInserted = false;
 
-    public function __construct(int $priceInCents = 0, Context $context = null, Session $session = null)
+    public function __construct($priceInCents = 0, $context = null, $session = null)
     {
         $this->priceInCents = $priceInCents;
         $this->protocol = new Protocol();
@@ -93,7 +93,7 @@ class Content
         return ob_get_clean();
     }
 
-    public function accessGranted() : bool
+    public function accessGranted()
     {
         return $this->granted;
     }
